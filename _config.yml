@@ -106,8 +106,8 @@ theme: fluid
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: git@github.com:xiaolaji404/xiaolaji404.github.io.git
-  branch: main
+  repo: git@github.com:xiaolaji404/xiaolaji-hexo-blog.git
+  branch: master
 
 markdown:
   preset: "default"
