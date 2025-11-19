@@ -1,0 +1,350 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>架构杂谈 | 星陨的博客</title><noscript>开启JavaScript才能访问本站哦~</noscript><link rel="icon" href="/img/pwa/favicon.png"><!-- index.css--><link rel="stylesheet" href="/css/index.css?v=3.0.19"><!-- inject head--><link rel="canonical" href="https://xiaolaji.site/2025/01/01/%E6%9E%B6%E6%9E%84%E6%9D%82%E8%B0%88/index.html"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css"><!-- aplayer--><!-- swiper--><!-- fancybox ui--><!-- katex--><!-- Open Graph--><meta name="description" content="什么是架构设计架构设计是基于架构原则和目标给出问题解决方案的过程。架构和设计遵循相同的原则和方法，只是解决问题的规模和层次不同，而这规模和层次没有明显界限。 问题： 架构设计最基础的个人素质是什么？ 架构设计最基础的技术能力是什么？ 原则、目标与方法原则：动静分离，高内聚，低耦合 目标： 可控性："><!-- pwa--><meta name="apple-mobile-web-app-capable" content="星陨的博客"><meta name="theme-color" content="var(--efu-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--efu-main)"><link rel="bookmark" href="/img/pwa/favicon.png"><link rel="apple-touch-icon" href="/img/pwa/favicon.png" sizes="180x180"><script>console.log(' %c Solitude %c ' + '3.0.19' + ' %c https://github.com/everfu/hexo-theme-solitude',
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+            },
+            diffDateFormat: (selector) => {
+                selector.forEach(item => {
+                    const date = new Date(item.getAttribute('datetime') || item.textContent);
+                    item.textContent = (date.getMonth() + 1).toString()+'/'+date.getDate().toString();
+                });
+            },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined) {
+        const nowMode =
+            isDarkMode ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', nowMode);
+    } else {
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    }
+    typeof rm === 'object' && rm.mode(cachedMode === 'dark' && isDarkMode)
+}
+initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: undefined,
+    localsearch: undefined,
+    runtime: '2023-04-20 00:00:00',
+    lazyload: {
+        enable: false,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":200,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: false,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"复制成功","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请遵循GPL协议。","totalk":"无需删除空行，直接输入评论即可"},
+    aside: {
+        state: {
+            morning: "✨ 早上好，新的一天开始了",
+            noon: "🍲 午餐时间",
+            afternoon: "🌞 下午好",
+            night: "早点休息",
+            goodnight: "晚安 😴",
+        },
+        witty_words: [],
+        witty_comment: {
+            prefix: '好久不见，',
+            back: '欢迎再次回来，',
+        },
+    },
+    covercolor: {
+        enable: false
+    },
+    comment: false,
+    lightbox: 'null',
+    right_menu: false,
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><!-- page-config head--><script id="config-diff">var PAGE_CONFIG = {
+    is_post: true,
+    is_page: false,
+    is_home: false,
+    page: '',
+    toc: true,
+    comment: false,
+    ai_text: false,
+    color: false,
+}</script></head><body id="body"><!-- universe--><canvas id="universe"></canvas><!-- background img--><!-- loading--><!-- console--><!-- sidebar--><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fas fa-circle-half-stroke"></i><span>显示模式</span></span></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="card-tag-cloud"></div></div></div></div><!-- keyboard--><!-- righhtside--><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><a id="site-name" href="/" title="返回博客主页"><span class="title">Solitude</span><i class="solitude fas fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">架构杂谈</a></div></div><div id="menus"></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="nav-totop" onclick="sco.toTop()"><a class="totopbtn"><i class="solitude fas fa-arrow-up"></i><span id="percent">0</span></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fas fa-bars"></i></a></div></div></div></nav><div class="coverdiv" id="coverdiv"><img class="nolazyload" id="post-cover" src="/image/%E6%9E%B6%E6%9E%84%E6%9D%82%E8%B0%88Banner.png" alt="架构杂谈"></div><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original" title="该文章为原创文章，注意版权协议">原创</a><div class="tag_share"><div class="post-meta__tag-list"></div></div></div></div><h1 class="post-title">架构杂谈</h1><div id="post-meta"><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content article-container"><h2 id="什么是架构设计"><a href="#什么是架构设计" class="headerlink" title="什么是架构设计"></a>什么是架构设计</h2><p>架构设计是基于架构原则和目标给出问题解决方案的过程。<br>架构和设计遵循相同的原则和方法，只是解决问题的规模和层次不同，而这规模和层次没有明显界限。</p>
+<h4 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h4><ol>
+<li>架构设计最基础的个人素质是什么？</li>
+<li>架构设计最基础的技术能力是什么？</li>
+</ol>
+<h3 id="原则、目标与方法"><a href="#原则、目标与方法" class="headerlink" title="原则、目标与方法"></a>原则、目标与方法</h3><h4 id="原则："><a href="#原则：" class="headerlink" title="原则："></a>原则：</h4><p>动静分离，高内聚，低耦合</p>
+<h4 id="目标："><a href="#目标：" class="headerlink" title="目标："></a>目标：</h4><ol>
+<li>可控性：拆分，分而治之，拆分粒度取决于业务、人、制度多方因素</li>
+<li>复用性：抽象，在阶段都要做好抽象复用，开发-&gt;设计-&gt;架构-&gt;领域-&gt;组织架构</li>
+<li>系统标准：高性能（高并发）、可靠性（数据一致）、稳定性、可用性、安全性、易用性、可扩展、可维护</li>
+</ol>
+<h4 id="方法：4-1视图"><a href="#方法：4-1视图" class="headerlink" title="方法：4+1视图"></a>方法：4+1视图</h4><ol>
+<li>用例视图：用户怎么看，UML用例图</li>
+<li>逻辑视图：系统功能抽象，UML类图、交互图、时序图</li>
+<li>开发视图：开发人员怎么看，开发文档和设计文档</li>
+<li>进程视图：程序运行状态，线程、进程、系统交互，UML活动图</li>
+<li>物理视图：部署视图，部署、网络、可靠性、可伸缩</li>
+</ol>
+<h4 id="问题：-1"><a href="#问题：-1" class="headerlink" title="问题："></a>问题：</h4><ol>
+<li>在不同开发阶段实现架构设计的方法论有哪些？</li>
+<li>影响拆分粒度的因素有哪些？</li>
+<li>实现架构目标的技术有哪些，其原理是什么？</li>
+<li>为什么数据驱动设计使用最广泛，数据库三范式体现了哪些架构原则？</li>
+<li>为什么互联网公司不招初中级开发，而软件公司会大量招？</li>
+</ol>
+<h2 id="架构分类"><a href="#架构分类" class="headerlink" title="架构分类"></a>架构分类</h2><h3 id="进程角度分类："><a href="#进程角度分类：" class="headerlink" title="进程角度分类："></a>进程角度分类：</h3><ol>
+<li>单体架构：服务在一个进程内</li>
+<li>分布式架构：服务在多个进程内</li>
+</ol>
+<h3 id="单体架构分类"><a href="#单体架构分类" class="headerlink" title="单体架构分类"></a>单体架构分类</h3><ol>
+<li>简单模式：内部没有拆分</li>
+<li>MVC模式：内部分层</li>
+<li>前后分离：前后端逻辑独立实现</li>
+<li>组件模式：子项目打包为一个整体项目，手工打包-&gt;ant-&gt;maven</li>
+<li>组件库模式：公共代码打包成组织库发布</li>
+</ol>
+<p>web项目前后分离两大阶段：</p>
+<ol>
+<li>后端渲染阶段：servlet-&gt;jsp-&gt;struts-&gt;springmvc-&gt;模板引擎-&gt;ajax</li>
+<li>前端渲染阶段：ajax-&gt;jquery-&gt;Angular、react、vue、echart</li>
+</ol>
+<p>单体架构问题：代码耦合不适合迭代更新、更新部署影响大、大型项目开发困难、项目启动慢可用性下降、扩展性不好</p>
+<h3 id="分布式架构分类"><a href="#分布式架构分类" class="headerlink" title="分布式架构分类"></a>分布式架构分类</h3><ol>
+<li>SOA面向服务架构：关注企业IT生态建设、企业服务总线、异构服务整合；基于RPC、MQ技术</li>
+<li>DSA分布式服务架构：关注系统业务拆分，考虑系统架构和服务治理，服务使用同一分布式框架</li>
+<li>MSA微服务架构：精进的DSA架构，按架构原则目标实现系统，基于微服务治理技术</li>
+</ol>
+<ul>
+<li>微服务治理：服务注册与发现、服务监控、资源隔离、熔断、降级、限流</li>
+<li>微服务问题：服务雪崩、幂等、超时、事务一致</li>
+</ul>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ol>
+<li>我们有哪些系统是单体架构，而且必须是单体架构？</li>
+<li>SOA考虑的拆分粒度是什么？</li>
+<li>SOA实现服务整合和复用的方式方法是什么？</li>
+<li>分布式服务架构有哪几种常用框架，优缺点是什么？</li>
+<li>推进DSA向MSA发展的技术有哪些，分别解决了哪些问题？</li>
+<li>单体架构、SOA、DSA、MSA优缺点是什么，用什么方法技术满足了架构原则和目标?</li>
+</ol>
+<h2 id="常用系统架构"><a href="#常用系统架构" class="headerlink" title="常用系统架构"></a>常用系统架构</h2><h3 id="分层架构"><a href="#分层架构" class="headerlink" title="分层架构"></a>分层架构</h3><p>分层架构模式里的组件被分成几个平行的层次，每一层都代表了应用的一个功能(展示逻辑或者业务逻辑)。 尽管分层架构没有规定自身要分成几层几种，大多数的结构都分成四个层次：<code>展示层</code>，<code>业务层</code>，<code>持久层</code>，和<code>数据库层</code>。如下图：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/34234678/1753004342389-a166caf6-760b-4872-8f0a-eb7168a3195c.png"></p>
+<h3 id="Clean架构"><a href="#Clean架构" class="headerlink" title="Clean架构"></a>Clean架构</h3><p>外圈的层次可以依赖内层，反之不可以；内圈核心的实体代表业务，不可以依赖其所处的技术环境。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/34234678/1753004342465-56ee2acd-d6e6-4326-927a-cf1d684a76ea.png"></p>
+<h3 id="六边形"><a href="#六边形" class="headerlink" title="六边形"></a>六边形</h3><p>六边形架构又称“端口和适配器模式”，是Alistair Cockburn提出的一种具有对称性特征的架构风格。在这种架构中，系统通过适配器的方式与外部交互，将应用服务于领域服务封装在系统内部。</p>
+<p>六边型的适配器类似于反腐层的概念。</p>
+<p>反腐层（Anti-corruption layer，简称 ACL）介于新应用和旧应用之间，用于确保新应用的设计不受老应用的限制。是一种在不同应用间转换的机制。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/34234678/1753004342522-60c95d39-2948-4558-baec-c58f5e727e1c.png"></p>
+<h3 id="CQRS"><a href="#CQRS" class="headerlink" title="CQRS"></a>CQRS</h3><p>命令查询的责任分离Command Query Responsibility Segregation<br>Command和Query数据源分为同构和民构两种，读写分享是这种架构的一种简单实现。</p>
+<p>从事务的角度来看 CQRS，需要面对的问题从根本来说是个最终一致性的问题。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/34234678/1753004342580-fad92530-9533-4833-a6d9-ca83d9404088.png"></p>
+<p>1</p>
+<h3 id="问题：-2"><a href="#问题：-2" class="headerlink" title="问题："></a>问题：</h3><ol>
+<li>同构数据源有哪几种，怎么实现的数据同步？</li>
+<li>异构数据源有哪几种，怎么实现的数据同步？</li>
+<li>数据一致性的保障方法有哪些？</li>
+</ol>
+<h3 id="事件驱动"><a href="#事件驱动" class="headerlink" title="事件驱动"></a>事件驱动</h3><p>异步、高度解耦</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/34234678/1753004342638-a05d0cb9-67ed-4c3b-81f4-7f3604e093f3.png"></p>
+<h2 id="常用业务分析方法"><a href="#常用业务分析方法" class="headerlink" title="常用业务分析方法"></a>常用业务分析方法</h2><ol>
+<li>数据库驱动：基于数据库表设计构建上层系统</li>
+<li>用例驱动（Use Case）</li>
+<li>用户故事（User Story）</li>
+<li>测试驱动（TDD）</li>
+</ol>
+<h3 id="DDD（Domain-Driven-Design）"><a href="#DDD（Domain-Driven-Design）" class="headerlink" title="DDD（Domain-Driven Design）"></a>DDD（Domain-Driven Design）</h3><ul>
+<li>场景：MSA微服务架构在技术维度、业务维度、团队管理方面对架构方法论提出了新的挑战，需要综合性系统架构方法论支持MSA的落地实施。</li>
+<li>思想：开发团队应该从业务需求中提炼出统一语言，再基于统一语言建立领域模型；通过领域模型指导程序设计与编码；通过重构和设计模式改进开发质量。</li>
+</ul>
+<p>DDD为两类方法论的实践集合：</p>
+<ol>
+<li>领域模型分析：数据库驱动、用例驱动（Use Case）、测试驱动（TDD）、用户故事（User Story）</li>
+<li>系统架构设计：分层架构、clean架构、六边型架构、事件驱动、CQRS模式</li>
+</ol>
+<p>DDD的过程：Why-&gt;What-&gt;How</p>
+<ol>
+<li>从问题域到解决方案域的过程</li>
+<li>从需求分析到设计的过程</li>
+<li>逐步识别限界上下文的过程</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/34234678/1753004342694-2c841c81-c296-499a-9e30-c1f406c1b44b.png"></p>
+<h3 id="领域模型分析"><a href="#领域模型分析" class="headerlink" title="领域模型分析"></a>领域模型分析</h3><p><code>问题域</code>：核心领域、子领域、限界上下文、上下文映射</p>
+<p>核心为限界上下文，基本与微服务可以对应上。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/34234678/1753004342757-0b7b7b31-da93-4aab-bda4-316af8a8c7dc.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/34234678/1753004342809-952389aa-c8e4-408c-a80e-50bb25bc49f5.png"></p>
+<h3 id="领域分析方法：6w2h"><a href="#领域分析方法：6w2h" class="headerlink" title="领域分析方法：6w2h"></a>领域分析方法：6w2h</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/34234678/1753004342876-db7ec46b-50f2-40c3-83cd-6df981eb7ea0.png"></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="实体-entity"><a href="#实体-entity" class="headerlink" title="实体(entity)"></a>实体(entity)</h3><p>重点：具备唯一ID，是否是同一实体比较ID，能够被持久化，具有业务逻辑</p>
+<h3 id="值对象-value-object"><a href="#值对象-value-object" class="headerlink" title="值对象(value object)"></a>值对象(value object)</h3><p>重点：不具备唯一ID，是否是同一对象比较值是否相同</p>
+<p>值对象的定义是：描述事物的对象；更准确的说，一个没有概念上标识符描述一个领域方面的对象。</p>
+<h3 id="聚合及聚合根-aggregate、aggregate-root"><a href="#聚合及聚合根-aggregate、aggregate-root" class="headerlink" title="聚合及聚合根(aggregate、aggregate root)"></a>聚合及聚合根(aggregate、aggregate root)</h3><p>重点：大部分的聚合都只是一个实体，该实体同时也是聚合根，并不是所有的实体都是聚集根，但只有实体才能成为聚集根。</p>
+<p>一个聚合是一组相关的被视为整体的对象。每个聚合都有一个根对象（聚合根实体），从外部访问只能通过这个对象。根实体对象有组成聚合所有对象的引用，但是外部对象只能引用根对象实体。</p>
+<p>基于聚合的以上概念，我们可以推论出从数据库查询时的单元也是以聚合为一个单元，也就是说我们不能直接查询聚合内部的某个非根的对象；</p>
+<h3 id="服务（services）"><a href="#服务（services）" class="headerlink" title="服务（services）"></a>服务（services）</h3><p>服务这个词在服务模式中是这么定义的：服务提供的操作是它提供给使用它的客户端，并突出领域对象的关系。</p>
+<p>所有的service只负责协调并委派业务逻辑给领域对象进行处理，其本身并真正实现业务逻辑，绝大部分的业务逻辑都由领域对象承载和实现了。</p>
+<p>当一个领域操作被视为一个重要的领域概念，一般就应该作为领域服务。 服务应该是无状态的。</p>
+<h3 id="工厂-factories"><a href="#工厂-factories" class="headerlink" title="工厂(factories)"></a>工厂(factories)</h3><p>工厂用来封装创建一个复杂对象尤其是聚合时所需的知识，作用是将创建对象的细节隐藏起来。客户传递给工厂一些简单的参数，然后工厂可以在内部创建出一个复杂的领域对象然后返回给客户。当创建 实体和值对象复杂时建议使用工厂模式。</p>
+<h3 id="仓储（repositories）"><a href="#仓储（repositories）" class="headerlink" title="仓储（repositories）"></a>仓储（repositories）</h3><p>仓储是用来管理实体的集合。</p>
+<p>仓储里面存放的对象一定是聚合，原因是domain是以聚合的概念来划分边界的；聚合作为一个整体概念，要么一起被取出来，要么一起被删除。外部访问不会单独对某个聚合内的子对象进行单独操作。因此，我们只对聚合设计仓储。</p>
+<p>respositories和dao：</p>
+<p>dao是面向数据访问的，是关系型数据库和应用之间的契约。</p>
+<p>repository：位于领域层，面向aggregation root。repository是一个独立的抽象，使用领域的通用语言，它与dao进行交互，并使用领域理解的语言提供对领域模型的数据访问服务的“业务接口”。</p>
+<h3 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h3><ol>
+<li>DDD在技术层面实现的最大困难在哪里？</li>
+<li>DDD在管理层面实现的最大困难在哪里?</li>
+</ol>
+<h3 id="DSL（Domain-Specific-Language）"><a href="#DSL（Domain-Specific-Language）" class="headerlink" title="DSL（Domain Specific Language）"></a>DSL（Domain Specific Language）</h3><p><code>如果我们能把设计做到极致，它就能成为一门语言，一门解决一个特定问题的语言。</code></p>
+<ul>
+<li>常规模式 JAVA：业务分析-&gt;架构设计-&gt;程序设计-&gt;编码设计-&gt;开发功能-&gt;形成产品</li>
+<li>原型模式 Python: 业务分析-&gt;原型-&gt;产品输出-&gt;业务分析，用原型不断迭代优化</li>
+<li>DSL模式 Lisp：业务分析、DSL、原型开发、产品输出，同步开发迭代</li>
+</ul>
+<p>01-&gt;Assembly-&gt;c-&gt;GPL (Generalized Programming Language)-&gt;DSL</p>
+<p>01-&gt;Assembly-&gt;c-&gt;Lisp-&gt;DSL</p>
+<p>常见DSL:</p>
+<p>HTML、CSS、MAVEN、sql</p>
+<p>我们通常所用的中间件框架实际上就是一种内部 DSL：</p>
+<p>Spring、spring mvc、springboot、mybatis</p>
+<p>Lisp 的本质：<a target="_blank" rel="noopener" href="https://www.iteedu.com/blog/plang/lisp/lispdiary/lispbz/">https://www.iteedu.com/blog/plang/lisp/lispdiary/lispbz/</a></p>
+<p>Lisp之根源：<a target="_blank" rel="noopener" href="https://www.iteedu.com/blog/plang/lisp/lispdiary/lispzgy/">https://www.iteedu.com/blog/plang/lisp/lispdiary/lispzgy/</a></p>
+<h2 id="组织架构-技术架构"><a href="#组织架构-技术架构" class="headerlink" title="组织架构&amp;技术架构"></a>组织架构&amp;技术架构</h2><h3 id="开发人员组织架构分两种："><a href="#开发人员组织架构分两种：" class="headerlink" title="开发人员组织架构分两种："></a>开发人员组织架构分两种：</h3><ol>
+<li>水平拆分的专业技术团队：前端、原生、后端、数据、测试、产品、PM</li>
+<li>垂直拆分的跨职能团队：每个团队包含各类人员</li>
+</ol>
+<h3 id="管理方式："><a href="#管理方式：" class="headerlink" title="管理方式："></a>管理方式：</h3><ol>
+<li>水平拆分以专业的组长为主，强技术弱业务，沟通协调成本高</li>
+<li>垂直拆分以产品或PM为主，强业务弱技术，技术风险大、工作量不平均</li>
+</ol>
+<h4 id="问题：-3"><a href="#问题：-3" class="headerlink" title="问题："></a>问题：</h4><ol>
+<li>垂直拆分与水平拆分优缺点是什么，如何解决？</li>
+<li>垂直拆分与水平拆分分别适用于哪种场景？</li>
+<li>如何解决跨职能团队之间工作量不平均问题？</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author_group"><div class="post-copyright__author_img"><img class="post-copyright__author_img_front" src="/img/logo.png"></div><div class="post-copyright__author_name">星陨</div><div class="post-copyright__author_desc"></div></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div id="quit-box" onclick="RemoveRewardMask()"></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本文是原创文章，采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>协议，完整转载请注明来自<a href="/">星陨的博客</a></span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__tag-list"></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><div class="top-group"><div class="sayhi" id="sayhi" onclick="sco.changeWittyWord()"></div></div></div><div class="avatar"><img alt="头像" src="/img/logo.png"></div><div class="description"></div><div class="bottom-group"><span class="left"><div class="name">星陨</div><div class="desc">只有迎风，风筝才能飞得更高。</div></span><div class="social-icons is-center"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="solitude fas fa-bars"></i><span>文章目录</span></div><div class="toc-content" id="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-text">什么是架构设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-text">问题：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%88%99%E3%80%81%E7%9B%AE%E6%A0%87%E4%B8%8E%E6%96%B9%E6%B3%95"><span class="toc-text">原则、目标与方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E5%88%99%EF%BC%9A"><span class="toc-text">原则：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%EF%BC%9A"><span class="toc-text">目标：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%EF%BC%9A4-1%E8%A7%86%E5%9B%BE"><span class="toc-text">方法：4+1视图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A-1"><span class="toc-text">问题：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%88%86%E7%B1%BB"><span class="toc-text">架构分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E8%A7%92%E5%BA%A6%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="toc-text">进程角度分类：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84%E5%88%86%E7%B1%BB"><span class="toc-text">单体架构分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E5%88%86%E7%B1%BB"><span class="toc-text">分布式架构分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-text">问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="toc-text">常用系统架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="toc-text">分层架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Clean%E6%9E%B6%E6%9E%84"><span class="toc-text">Clean架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E8%BE%B9%E5%BD%A2"><span class="toc-text">六边形</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CQRS"><span class="toc-text">CQRS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A-2"><span class="toc-text">问题：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8"><span class="toc-text">事件驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E4%B8%9A%E5%8A%A1%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95"><span class="toc-text">常用业务分析方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DDD%EF%BC%88Domain-Driven-Design%EF%BC%89"><span class="toc-text">DDD（Domain-Driven Design）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B%E5%88%86%E6%9E%90"><span class="toc-text">领域模型分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95%EF%BC%9A6w2h"><span class="toc-text">领域分析方法：6w2h</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93-entity"><span class="toc-text">实体(entity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%80%BC%E5%AF%B9%E8%B1%A1-value-object"><span class="toc-text">值对象(value object)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E5%8F%8A%E8%81%9A%E5%90%88%E6%A0%B9-aggregate%E3%80%81aggregate-root"><span class="toc-text">聚合及聚合根(aggregate、aggregate root)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%EF%BC%88services%EF%BC%89"><span class="toc-text">服务（services）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82-factories"><span class="toc-text">工厂(factories)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%93%E5%82%A8%EF%BC%88repositories%EF%BC%89"><span class="toc-text">仓储（repositories）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98-1"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DSL%EF%BC%88Domain-Specific-Language%EF%BC%89"><span class="toc-text">DSL（Domain Specific Language）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E7%BB%87%E6%9E%B6%E6%9E%84-%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="toc-text">组织架构&amp;技术架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E7%BB%84%E7%BB%87%E6%9E%B6%E6%9E%84%E5%88%86%E4%B8%A4%E7%A7%8D%EF%BC%9A"><span class="toc-text">开发人员组织架构分两种：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-text">管理方式：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A-3"><span class="toc-text">问题：</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="solitude fas fa-map"></i><span>最近发布</span></div><div class="aside-list"><a class="aside-list-item" href="/2025/01/01/%E6%9E%B6%E6%9E%84%E6%9D%82%E8%B0%88/" title="架构杂谈"><div class="thumbnail"><img alt="架构杂谈" src="/image/%E6%9E%B6%E6%9E%84%E6%9D%82%E8%B0%88Banner.png"></div><div class="content"><span class="title" href="/2025/01/01/%E6%9E%B6%E6%9E%84%E6%9D%82%E8%B0%88/" title="架构杂谈">架构杂谈</span></div></a></div></div></div></div></main><footer id="footer"><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2023 - 2025 By&nbsp;<a class="footer-bar-link" href="/"><img class="author-avatar" src="/img/pwa/favicon.png">星陨</a></div><div class="beian-group"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io/">框架：Hexo</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/everfu/hexo-theme-solitude">主题：Solitude</a></div></div></div></div></footer></div><!-- right_menu--><!-- inject body--><div><script src="/js/utils.js?v=3.0.19"></script><script src="/js/main.js?v=3.0.19"></script><script src="/js/third_party/waterfall.min.js?v=3.0.19"></script><script src="https://fastly.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script src="/js/third_party/universe.min.js?v=3.0.19"></script><script>dark()
+</script><script src="/js/tw_cn.js?v=3.0.19"></script><script src="https://fastly.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+utils.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+</script><script src="https://fastly.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><div class="js-pjax"></div></div><!-- pjax--><script>const pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+})
+
+document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+})
+
+document.addEventListener('pjax:complete', () => {
+    window.refreshFn()
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+    if (e.request.status === 404) {
+        pjax.loadUrl('/404.html')
+    }
+})</script><!-- google adsense--><!-- search--><!-- music--></body></html>
+        <script>
+            const posts = ["2025/01/01/架构杂谈/"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>
